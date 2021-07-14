@@ -1,0 +1,38 @@
+{
+  "name": "node_project_template",
+  "version": "1.0.0",
+  "description": "A template for all the node apps",
+  "main": "app.js",
+  "scripts": {
+    "unit_test": "mocha 'test/unit/**/*.test.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anurag8867/node_project_template.git"
+  },
+  "author": "Anurag",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anurag8867/node_project_template/issues"
+  },
+  "homepage": "https://github.com/anurag8867/node_project_template#readme",
+  "dependencies": {
+    "async": "^3.2.0",
+    "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "cheerio": "^1.0.0-rc.3",
+    "config": "^3.3.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.9",
+    "express-validator": "^6.5.0",
+    "mocha": "^7.2.0",
+    "mysql": "^2.18.1",
+    "path": "^0.12.7",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5",
+    "s": "^1.0.0",
+    "url": "^0.11.0"
+  }
+}
