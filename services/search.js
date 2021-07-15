@@ -10,14 +10,15 @@ funcs.startSearch = async () => {
   let data = await accommodateWholeData();
   await sendNotificationIfAnyCarAvailableFromTheFavoriteList(data);
   await sleep(config.get('sleep.next_iteration_in_minute'));
+  console.log(`An iteration completed at ${new Date()}`);
   return;
 };
 
 async function start() {
+  console.log(`Iteration started`);
   while (true) {
     await funcs.startSearch();
     if (config.get('is_development')) {
-      console.log('one iteration completed');
       process.exit(1);
     }
   }
@@ -84,7 +85,9 @@ async function sendNotificationIfAnyCarAvailableFromTheFavoriteList(list) {
           await sleep(config.get('sleep.next_car_in_minute'));
           await sendSlackNotification(iterator.lmsShareLink, iterator);
         } else {
-          await sendNotificationIfAnyCarAvailableFromNewParams(iterator);
+          if (config.get('suggest') && config.get('is_development')) {
+            await sendNotificationIfAnyCarAvailableFromNewParams(iterator);
+          }
         }
       }
     }

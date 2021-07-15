@@ -1,13 +1,11 @@
 {
-  "is_development": true,
-  "url": "https://api-sell24.cars24.team/buy-used-car?listingPrice-range=0-630000&carName=MARUTI%20SWIFT%20DZIRE&carName=MARUTI%20SWIFT&carName=TATA%20TIAGO%20JTP&carName=TATA%20TIAGO%20NRG&carName=TATA%20TIAGO&carName=TATA%20TIGOR&carName=TATA%20TIGOR%20BUZZ&carName=TATA%20TIGOR%20JTP&carName=MARUTI%20CELERIO&carName=MARUTI%20CELERIO%20X&carName=HYUNDAI%20I20&carName=HYUNDAI%20ELITE%20I20&carName=HYUNDAI%20I20%20ACTIVE&carName=HONDA%20AMAZE&carName=HYUNDAI%20XCENT%20PRIME&carName=HYUNDAI%20XCENT&carName=TATA%20ALTROZ&carName=MARUTI%20IGNIS&carName=MARUTI%20VITARA%20BREZZA&carName=MARUTI%20BALENO&carName=MARUTI%20DZIRE&carName=MARUTI%20ERTIGA&carName=MARUTI%20GRAND%20VITARA&carName=MARUTI%20XL6&carName=TATA%20NEXON&carName=TATA%20NEXON%20EV&carName=HYUNDAI%20VENUE&carName=FORD%20ECOSPORT&carName=TOYOTA%20GLANZA&carName=MARUTI%20S%20CROSS&carName=MARUTI%20CIAZ&carName=HYUNDAI%20VERNA&carName=HYUNDAI%20CRETA&year-range=2016-2021&registrationCity=Delhi-ncr&registrationCity=delhi&registrationCity=noida&registrationCity=ghaziabad&registrationCity=faridabad&registrationCity=gurgaon&registrationCity=haryana&registrationCity=uttar%20pradesh&sort=LH&serveWarrantyCount=true&gaId=862512553.1626352138&page=1&storeCityId=132",
+  "is_development": false,
+  "suggest": false,
+  "url": "https://api-sell24.cars24.team/buy-used-car?carName=MARUTI%20SWIFT%20DZIRE&carName=MARUTI%20SWIFT&carName=TATA%20TIAGO%20JTP&carName=TATA%20TIAGO%20NRG&carName=TATA%20TIAGO&carName=TATA%20TIGOR&carName=TATA%20TIGOR%20BUZZ&carName=TATA%20TIGOR%20JTP&carName=MARUTI%20CELERIO&carName=MARUTI%20CELERIO%20X&carName=HYUNDAI%20I20&carName=HYUNDAI%20ELITE%20I20&carName=HYUNDAI%20I20%20ACTIVE&carName=HONDA%20AMAZE&carName=HYUNDAI%20XCENT%20PRIME&carName=HYUNDAI%20XCENT&carName=TATA%20ALTROZ&carName=MARUTI%20IGNIS&carName=MARUTI%20VITARA%20BREZZA&carName=MARUTI%20BALENO&carName=MARUTI%20DZIRE&carName=MARUTI%20ERTIGA&carName=MARUTI%20GRAND%20VITARA&carName=MARUTI%20XL6&carName=TATA%20NEXON&carName=TATA%20NEXON%20EV&carName=HYUNDAI%20VENUE&carName=FORD%20ECOSPORT&carName=TOYOTA%20GLANZA&carName=MARUTI%20S%20CROSS&carName=MARUTI%20CIAZ&carName=HYUNDAI%20VERNA&carName=HYUNDAI%20CRETA&year-range=2016-2021&sort=LH&serveWarrantyCount=true&gaId=862512553.1626352138&storeCityId=2",
   "favorites": {
-    "1008054143": true
+    "1051927940": true
   },
-  "avoid": {
-    "1095985741": true,
-    "1480350123": true
-  },
+  "avoid": {},
   "port": 3008,
   "mysql": {
     "host": "localhost",
