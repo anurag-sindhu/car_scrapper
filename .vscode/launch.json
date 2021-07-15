@@ -7,6 +7,15 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/app.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "API Tests",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
@@ -43,11 +52,11 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "delete",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/app.js"
+            "program": "${workspaceFolder}/delete.js"
         }
     ]
 }

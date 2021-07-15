@@ -1,9 +1,7 @@
-'use strict'
+'use strict';
 var express = require('express'),
-    http = require('http'),
-    config = require('config'),
-    scrapDbResolver = require('../db/scrap'),
-    scrapService = require("../services/scrap");
+  http = require('http'),
+  searchService = require('../services/search');
 
 var app = express();
 
@@ -11,14 +9,12 @@ var app = express();
 http.globalAgent.maxSockets = 5;
 
 app.get('/', async function (req, res, next) {
-    try {
-        let scrappedData = await scrapService.startScrap({ url: config.get(`websites.medium.url`) });
-        let dbResponse = await scrapDbResolver.insertScrappedData({ data: scrappedData, con: process.connection });
-        return res.status(config.get('httpStatusCode.oK') && parseInt(config.get('httpStatusCode.oK')))
-            .send({ scrappedData, dbResponse });
-    } catch (e) {
-        return res.status(config.get('httpStatusCode.internalServerError')).send(e);
-    }
+  try {
+    let data = await searchService.startSearch();
+    return res.status(200).send(data);
+  } catch (e) {
+    return res.status(e.status || 500).send(e);
+  }
 });
 
 module.exports = app;

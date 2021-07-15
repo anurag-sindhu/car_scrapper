@@ -1,81 +1,76 @@
 {
-    "websites": {
-        "medium": {
-            "url": "https://medium.com/"
-        }
+  "is_development": true,
+  "url": "https://api-sell24.cars24.team/buy-used-car?listingPrice-range=0-630000&carName=MARUTI%20SWIFT%20DZIRE&carName=MARUTI%20SWIFT&carName=TATA%20TIAGO%20JTP&carName=TATA%20TIAGO%20NRG&carName=TATA%20TIAGO&carName=TATA%20TIGOR&carName=TATA%20TIGOR%20BUZZ&carName=TATA%20TIGOR%20JTP&carName=MARUTI%20CELERIO&carName=MARUTI%20CELERIO%20X&carName=HYUNDAI%20I20&carName=HYUNDAI%20ELITE%20I20&carName=HYUNDAI%20I20%20ACTIVE&carName=HONDA%20AMAZE&carName=HYUNDAI%20XCENT%20PRIME&carName=HYUNDAI%20XCENT&carName=TATA%20ALTROZ&carName=MARUTI%20IGNIS&carName=MARUTI%20VITARA%20BREZZA&carName=MARUTI%20BALENO&carName=MARUTI%20DZIRE&carName=MARUTI%20ERTIGA&carName=MARUTI%20GRAND%20VITARA&carName=MARUTI%20XL6&carName=TATA%20NEXON&carName=TATA%20NEXON%20EV&carName=HYUNDAI%20VENUE&carName=FORD%20ECOSPORT&carName=TOYOTA%20GLANZA&carName=MARUTI%20S%20CROSS&carName=MARUTI%20CIAZ&carName=HYUNDAI%20VERNA&carName=HYUNDAI%20CRETA&year-range=2016-2021&registrationCity=Delhi-ncr&registrationCity=delhi&registrationCity=noida&registrationCity=ghaziabad&registrationCity=faridabad&registrationCity=gurgaon&registrationCity=haryana&registrationCity=uttar%20pradesh&sort=LH&serveWarrantyCount=true&gaId=862512553.1626352138&page=1&storeCityId=132",
+  "favorites": {
+    "1008054143": true
+  },
+  "avoid": {
+    "1095985741": true,
+    "1480350123": true
+  },
+  "port": 3008,
+  "mysql": {
+    "host": "localhost",
+    "user": "root",
+    "password": "password",
+    "database": "test"
+  },
+  "tables": {
+    "1": "CREATE TABLE if not exists scrap_url (id INT AUTO_INCREMENT PRIMARY KEY,uuid CHAR(36) NOT NULL, url VARCHAR(255) NOT NULL, ref_count INT NOT NULL, params varchar(255), created_at datetime DEFAULT CURRENT_TIMESTAMP,  updated_at datetime DEFAULT CURRENT_TIMESTAMP,  deleted_at datetime DEFAULT NULL)"
+  },
+  "acceptable_error_count": 2,
+  "slack": {
+    "username": "cars 24",
+    "url": "https://hooks.slack.com/services/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",
+    "channel": "DRPK0796D",
+    "allowed_fields_car": [
+      "registrationNumber",
+      "c24Quote",
+      "createdDate",
+      "fuelType",
+      "year",
+      "carName",
+      "make",
+      "model",
+      "carName",
+      "kilometerDriven",
+      "carId",
+      "price"
+    ]
+  },
+  "sleep": {
+    "next_car_in_minute": "1",
+    "next_page_in_minute": "2",
+    "next_iteration_in_minute": "30"
+  },
+  "new_car_params": {
+    "make": {
+      "HONDA": true,
+      "HYUNDAI": true,
+      "MARUTI": true
     },
-    "port": 3008,
-    "mysql": {
-        "host": "localhost",
-        "user": "root",
-        "password": "root",
-        "database": "test"
-    },
-    "tables": {
-        "1": "CREATE TABLE if not exists scrap_url (id INT AUTO_INCREMENT PRIMARY KEY,uuid CHAR(36) NOT NULL, url VARCHAR(255) NOT NULL, ref_count INT NOT NULL, params varchar(255), created_at datetime DEFAULT CURRENT_TIMESTAMP,  updated_at datetime DEFAULT CURRENT_TIMESTAMP,  deleted_at datetime DEFAULT NULL)"
-    },
-    "httpStatusCode": {
-        "continue": "100",
-        "switchingProtocols": "101",
-        "processing": "102",
-        "earlyHints": "103",
-        "oK": "200",
-        "created": "201",
-        "accepted": "202",
-        "nonAuthoritativeInformation": "203",
-        "noContent": "204",
-        "resetContent": "205",
-        "partialContent": "206",
-        "multiStatus": "207",
-        "alreadyReported": "208",
-        "iMUsed": "226",
-        "multipleChoices": "300",
-        "movedPermanently": "301",
-        "found": "302",
-        "seeOther": "303",
-        "notModified": "304",
-        "useProxy": "305",
-        "switchProxy": "306",
-        "temporaryRedirect": "307",
-        "permanentRedirect": "308",
-        "badRequest": "400",
-        "unauthorized": "401",
-        "paymentRequired": "402",
-        "forbidden": "403",
-        "notFound": "404",
-        "methodNotAllowed": "405",
-        "notAcceptable": "406",
-        "proxyAuthenticationRequired": "407",
-        "requestTimeout": "408",
-        "conflict": "409",
-        "gone": "410",
-        "lengthRequired": "411",
-        "preconditionFailed": "412",
-        "requestEntityTooLarge": "413",
-        "requestURITooLarge": "414",
-        "unsupportedMediaType": "415",
-        "requestedRangeNotSatisfiable": "416",
-        "expectationFailed": "417",
-        "i'mateapot": "418",
-        "misdirectedRequest": "421",
-        "unprocessableEntity": "422",
-        "locked": "423",
-        "failedDependency": "424",
-        "upgradeRequired": "426",
-        "preconditionRequired": "428",
-        "tooManyRequests": "429",
-        "requestHeaderFieldsTooLarge": "431",
-        "unavailableForLegalReasons": "451",
-        "internalServerError": "500",
-        "notImplemented": "501",
-        "badGateway": "502",
-        "serviceUnavailable": "503",
-        "gatewayTimeout": "504",
-        "httpVersionNotSupported": "505",
-        "variantAlsoNegotiates": "506",
-        "insufficientStorage": "507",
-        "loopDetected": "508",
-        "notExtended": "510",
-        "networkAuthenticationRequired": "511"
+    "model": {
+      "SWIFT": true,
+      "DZIRE": true,
+      "AMAZE": true,
+      "ELITE I20": true,
+      "CIAZ": true,
+      "IGNIS": true,
+      "SWIFT DZIRE": true,
+      "XCENT": true,
+      "BALENO": true
     }
+  },
+  "new_car_params_additional": {
+    "price": {
+      "MARUTI_SWIFT": 400000,
+      "MARUTI_BALENO": 400000,
+      "MARUTI_DZIRE": 450000,
+      "MARUTI_XCENT": 425000,
+      "MARUTI_CIAZ": 500000
+    },
+    "kilometerDriven": {
+      "MARUTI_CIAZ": 100000
+    }
+  }
 }
