@@ -50,14 +50,12 @@ funcs.sendSlackNotification = async ({ link = null, carData }) => {
   if (config.get('is_development')) {
     return;
   }
-  if (!carData || !carData.carId) {
+  if (!carData || !carData.carId || !link) {
     return;
   }
-  if (notificationSentRecently[carData.carId]) {
+  if (!canWeSendNotification(carData.carId)) {
     return;
   }
-  notificationSentRecently[carData.carId] = true;
-  if (!link) return;
   const fields = [];
   for (const iterator of config.get(`slack.allowed_fields_car`)) {
     fields.push({
@@ -153,6 +151,32 @@ funcs.addQueryParams = (params) => {
   return str;
 };
 
+funcs.checkCarsEligibility = ({ additional_params = null, carData }) => {
+  if (!carData) {
+    return false;
+  }
+  if (carData.reserved) {
+    return false;
+  }
+  if (additional_params) {
+    if (additional_params.increased) {
+      for (const key in additional_params.increased) {
+        if (!(carData[key] >= key)) {
+          return false;
+        }
+      }
+    }
+    if (additional_params.decreased) {
+      for (const key in additional_params.decreased) {
+        if (!(carData[key] <= additional_params.decreased[key])) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+};
+
 module.exports = funcs;
 function isParsable(str) {
   try {
@@ -161,4 +185,18 @@ function isParsable(str) {
   } catch (err) {
     return false;
   }
+}
+
+function canWeSendNotification(carId) {
+  if (!carId) {
+    return true;
+  }
+  if (!notificationSentRecently[carId]) {
+    notificationSentRecently[carId] = 0;
+  }
+  if (notificationSentRecently[carId] > config.get(`notification_limit`)) {
+    return false;
+  }
+  notificationSentRecently[carId] = notificationSentRecently[carId] + 1;
+  return true;
 }

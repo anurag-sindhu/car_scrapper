@@ -11,7 +11,7 @@ funcs.startSearch = async () => {
 };
 
 async function start() {
-  console.log(`Iteration started`);
+  console.log(`Search Iteration started`);
   while (true) {
     await funcs.startSearch();
     await utils.sleep(config.get('sleep.next_iteration_in_minute'));
