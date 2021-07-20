@@ -1,32 +1,32 @@
 {
   "is_development": false,
-  "notification_limit": 2,
+  "notification_limit": 1,
   "suggest": false,
   "base_url": "https://api-sell24.cars24.team/buy-used-car",
-  "url": "https://api-sell24.cars24.team/buy-used-car?carName=MARUTI%20SWIFT%20DZIRE&carName=MARUTI%20SWIFT&carName=TATA%20TIAGO%20JTP&carName=TATA%20TIAGO%20NRG&carName=TATA%20TIAGO&carName=TATA%20TIGOR&carName=TATA%20TIGOR%20BUZZ&carName=TATA%20TIGOR%20JTP&carName=MARUTI%20CELERIO&carName=MARUTI%20CELERIO%20X&carName=HYUNDAI%20I20&carName=HYUNDAI%20ELITE%20I20&carName=HYUNDAI%20I20%20ACTIVE&carName=HONDA%20AMAZE&carName=HYUNDAI%20XCENT%20PRIME&carName=HYUNDAI%20XCENT&carName=TATA%20ALTROZ&carName=MARUTI%20IGNIS&carName=MARUTI%20VITARA%20BREZZA&carName=MARUTI%20BALENO&carName=MARUTI%20DZIRE&carName=MARUTI%20ERTIGA&carName=MARUTI%20GRAND%20VITARA&carName=MARUTI%20XL6&carName=TATA%20NEXON&carName=TATA%20NEXON%20EV&carName=HYUNDAI%20VENUE&carName=TOYOTA%20GLANZA&carName=MARUTI%20S%20CROSS&carName=MARUTI%20CIAZ&carName=HYUNDAI%20VERNA&carName=HYUNDAI%20CRETA&sort=LH&serveWarrantyCount=true&gaId=862512553.1626352138&storeCityId=2",
+  "url": "carName=MARUTI%20SWIFT%20DZIRE&carName=MARUTI%20SWIFT&carName=TATA%20TIAGO%20JTP&carName=TATA%20TIAGO%20NRG&carName=TATA%20TIAGO&carName=TATA%20TIGOR&carName=TATA%20TIGOR%20BUZZ&carName=TATA%20TIGOR%20JTP&carName=MARUTI%20CELERIO&carName=MARUTI%20CELERIO%20X&carName=HYUNDAI%20I20&carName=HYUNDAI%20ELITE%20I20&carName=HYUNDAI%20I20%20ACTIVE&carName=HONDA%20AMAZE&carName=HYUNDAI%20XCENT%20PRIME&carName=HYUNDAI%20XCENT&carName=TATA%20ALTROZ&carName=MARUTI%20IGNIS&carName=MARUTI%20VITARA%20BREZZA&carName=MARUTI%20BALENO&carName=MARUTI%20DZIRE&carName=MARUTI%20ERTIGA&carName=MARUTI%20GRAND%20VITARA&carName=MARUTI%20XL6&carName=TATA%20NEXON&carName=TATA%20NEXON%20EV&carName=HYUNDAI%20VENUE&carName=FORD%20ECOSPORT&carName=TOYOTA%20GLANZA&carName=MARUTI%20S%20CROSS&carName=MARUTI%20CIAZ&carName=HYUNDAI%20VERNA&carName=HYUNDAI%20CRETA&year-range=2016-2021&sort=LH&serveWarrantyCount=true&gaId=862512553.1626352138&storeCityId=2",
   "favorites": {
+    "1005704942": {
+      "query": "carName=MAHINDRA%20SCORPIO&sort=LH&serveWarrantyCount=true&gaId=862512553.1626352138&page=1&storeCityId=2",
+      "additional_params": { "increased": {}, "decreased": {} }
+    },
+    "1051121521": {
+      "query": "carName=Maruti Baleno",
+      "additional_params": { "increased": {}, "decreased": { "price": 390000 } }
+    },
     "1051927940": {
       "query": "carName=Maruti Swift Dzire",
-      "additional_params": {
-        "increased": {},
-        "decreased": {}
-      }
+      "additional_params": { "increased": {}, "decreased": {} }
     }
   },
   "favorites_additional_query_params": {
     "year-range": "2016-2021",
     "sort": "LH",
     "storeCityId": "2",
-    "listingPrice-range": "300000-450000"
+    "listingPrice-range": "50000-450000"
   },
   "avoid": {},
   "port": 3008,
-  "mysql": {
-    "host": "localhost",
-    "user": "root",
-    "password": "password",
-    "database": "test"
-  },
+  "mysql": { "host": "localhost", "user": "root", "password": "password", "database": "test" },
   "tables": {
     "1": "CREATE TABLE if not exists scrap_url (id INT AUTO_INCREMENT PRIMARY KEY,uuid CHAR(36) NOT NULL, url VARCHAR(255) NOT NULL, ref_count INT NOT NULL, params varchar(255), created_at datetime DEFAULT CURRENT_TIMESTAMP,  updated_at datetime DEFAULT CURRENT_TIMESTAMP,  deleted_at datetime DEFAULT NULL)"
   },
@@ -36,6 +36,7 @@
     "url": "https://hooks.slack.com/services/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",
     "channel": "DRPK0796D",
     "allowed_fields_car": [
+      "price",
       "registrationNumber",
       "c24Quote",
       "createdDate",
@@ -46,21 +47,20 @@
       "model",
       "carName",
       "kilometerDriven",
-      "carId",
-      "price"
+      "lmsShareLink",
+      "carId"
     ]
   },
   "sleep": {
     "next_notification_in_minute": "1",
-    "next_page_in_minute": "2",
+    "next_page_in_minute": "0.2",
+    "five_minute": "5",
+    "one_minute": "1",
+    "ten_minute": "10",
     "next_iteration_in_minute": "15"
   },
   "new_car_params": {
-    "make": {
-      "HONDA": true,
-      "HYUNDAI": true,
-      "MARUTI": true
-    },
+    "make": { "HONDA": true, "HYUNDAI": true, "MARUTI": true },
     "model": {
       "SWIFT": true,
       "DZIRE": true,
@@ -76,13 +76,26 @@
   "new_car_params_additional": {
     "price": {
       "MARUTI_SWIFT": 400000,
-      "MARUTI_BALENO": 400000,
+      "MARUTI_BALENO": 450000,
       "MARUTI_DZIRE": 450000,
+      "MARUTI_SWIFT DZIRE": 450000,
       "MARUTI_XCENT": 425000,
-      "MARUTI_CIAZ": 500000
+      "MARUTI_CIAZ": 500000,
+      "MARUTI_CELERIO": 325000,
+      "TATA_TIAGO": 350000,
+      "HONDA_AMAZE": null,
+      "MARUTI_IGNIS": 350000,
+      "HYUNDAI_ELITE I20": 450000,
+      "FORD_ECOSPORT": null,
+      "MARUTI_VITARA BREZZA": 550000,
+      "TOYOTA_Glanza": 450000,
+      "HYUNDAI_VERNA": 450000,
+      "MARUTI_ERTIGA": 500000,
+      "HYUNDAI_CRETA": 650000,
+      "HYUNDAI_VENUE": 650000,
+      "MARUTI_S CROSS": 500000,
+      "TATA_NEXON ": 550000
     },
-    "kilometerDriven": {
-      "MARUTI_CIAZ": 100000
-    }
+    "kilometerDriven": { "MARUTI_CIAZ": 100000 }
   }
 }

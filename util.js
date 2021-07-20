@@ -46,11 +46,11 @@ funcs.getCarData = async ({ page = 1, url }) => {
   return await funcs.executeRequest(options);
 };
 
-funcs.sendSlackNotification = async ({ link = null, carData }) => {
+funcs.sendSlackNotification = async ({ carData, text = null }) => {
   if (config.get('is_development')) {
     return;
   }
-  if (!carData || !carData.carId || !link) {
+  if (!carData || !carData.carId) {
     return;
   }
   if (!canWeSendNotification(carData.carId)) {
@@ -62,10 +62,16 @@ funcs.sendSlackNotification = async ({ link = null, carData }) => {
       value: `*${iterator}*: ${carData[iterator]}`
     });
   }
+  const prepareText = () => {
+    let str = ``;
+    str = text ? `${text}` : 'Available: ';
+    str += `${carData.lmsShareLink}`;
+    return str;
+  };
   const body = {
     username: config.get('slack.username'),
     channel: config.get('slack.channel'),
-    text: `Available: ${link}`,
+    text: prepareText(),
     fields
   };
   return await funcs.executeRequest({
@@ -81,9 +87,6 @@ funcs.sendSlackNotification = async ({ link = null, carData }) => {
 };
 
 funcs.sleep = (time_in_min = null) => {
-  if (config.get('is_development')) {
-    return;
-  }
   if (!time_in_min) {
     return;
   }
@@ -106,14 +109,21 @@ funcs.getUniqueCarData = (data, accordingTo = null) => {
     }
     return false;
   });
-  fs.writeFileSync(path.join(__dirname, '..', `data.json`), JSON.stringify(resp));
+  fs.writeFileSync(path.join(__dirname, `data.json`), JSON.stringify(resp));
   return resp;
 };
 
 funcs.accommodateWholeData = async (url) => {
+  if (config.get('is_development')) {
+    return JSON.parse(fs.readFileSync(path.join(__dirname, `data.json`)), {
+      encoding: 'utf8'
+    });
+  }
+
   if (!url) {
     return null;
   }
+  url = refreshUrl(url);
   let getData = null;
   let data = null;
   let getFirstPageData = await funcs.getCarData({ url });
@@ -177,6 +187,37 @@ funcs.checkCarsEligibility = ({ additional_params = null, carData }) => {
   return true;
 };
 
+funcs.getConcernedFields = ({ data }) => {
+  const obj = {};
+  for (const key of config.get(`slack.allowed_fields_car`)) {
+    obj[key] = data[key] || null;
+  }
+  return obj;
+};
+
+funcs.isGoodChoice = ({ data }) => {
+  if (!data.reserved) {
+    if (data.price && data.make && data.model) {
+      if (config.has(`new_car_params_additional.price.${data.make}_${data.model}`)) {
+        if (config.get(`new_car_params_additional.price.${data.make}_${data.model}`)) {
+          return data.price <=
+            config.get(`new_car_params_additional.price.${data.make}_${data.model}`)
+            ? true
+            : false;
+        }
+        return false;
+      } else {
+        const configPath = path.join(__dirname, 'config', 'default.json');
+        const configData = JSON.parse(fs.readFileSync(configPath, { encoding: 'utf8', flag: 'r' }));
+        configData.new_car_params_additional.price[`${data.make}_${data.model}`] = null;
+        fs.writeFileSync(configPath, JSON.stringify(configData));
+        return false;
+      }
+    }
+  }
+  return false;
+};
+
 module.exports = funcs;
 function isParsable(str) {
   try {
@@ -199,4 +240,16 @@ function canWeSendNotification(carId) {
   }
   notificationSentRecently[carId] = notificationSentRecently[carId] + 1;
   return true;
+}
+
+function refreshUrl(url) {
+  let str = url;
+  const pageOfIndex = url.indexOf(`page=`);
+  // if (pageOfIndex) {
+  //   url = ``;
+  // }
+  if (url.indexOf(config.get('base_url')) === -1) {
+    str = `${config.get('base_url')}?${url}`;
+  }
+  return str;
 }
