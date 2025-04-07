@@ -1,5 +1,5 @@
 # 🚗 Car Scraper - Find Your Dream Second-Hand Car
-
+LinkedIn Post: https://www.linkedin.com/posts/-anurag-sindhu_softwareengineering-automation-sideproject-activity-7314250433810612224-XINS?utm_source=share&utm_medium=member_desktop&rcm=ACoAABkN1nYBUonoPjJUX6ZGgKSHTAe1NDkPic4
 [![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://www.javascript.com/)
 [![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)](https://slack.com)
