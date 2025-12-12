@@ -7,34 +7,26 @@ const funcs = {};
 const carsRepo = require('../db/repo/cars');
 
 funcs.notifyIfAnyNewCarAdded = async () => {
-    const { spinnyData, olaData, cars24Data, carDekhoData, truebilData } = await async.series({
-        spinnyData: async function() {
+    const { spinnyData, cars24Data, carDekhoData } = await async.series({
+        spinnyData: async function () {
             return utils.getCarsDataFromSpinny();
         },
-        olaData: async function() {
+        cars24Data: async function () {
+            return await utils.getCarsDataFromCars24();
+        },
+        carDekhoData: async function () {
             return [];
-            return utils.getCarsDataFromOla();
+            // return utils.getLatestCarsFromCardekho();
         },
-        cars24Data: async function() {
-            return utils.getCarsDataFromCars24();
-        },
-        carDekhoData: async function() {
-            return [];
-            return utils.getLatestCarsFromCardekho();
-        },
-        truebilData: async function() {
-            return utils.getCarsDataFromTruebil();
-        }
     });
 
-    const data = [...spinnyData, ...cars24Data, ...carDekhoData, ...olaData, ...truebilData];
+    const data = [...spinnyData, ...cars24Data, ...carDekhoData];
     console.log(
         `Total cars: ${data.length}, i.e.: spinnyData=${spinnyData.length},` +
-            ` cars24Data=${cars24Data.length}, carDekhoData=${carDekhoData.length}, olaData=${olaData.length},` +
-            ` truebilData=${truebilData.length},`
+        ` cars24Data=${cars24Data.length}, carDekhoData=${carDekhoData.length}`
     );
     for (const iterator of data) {
-        if (true || utils.isGoodChoice({ data: iterator })) {
+        if (utils.isGoodChoice({ data: { ...iterator } })) {
             const isNewProduct = carsRepo.isNewProduct({ carId: iterator.carId });
             if (isNewProduct) {
                 carsRepo.create({ data: iterator });
@@ -46,21 +38,85 @@ funcs.notifyIfAnyNewCarAdded = async () => {
                     `A new product got added at ${new Date()} : ${iterator.lmsShareLink} for: ${iterator.carId}`
                 );
             } else {
+                // Check for reserved status change from false to true
+                const carDetailsFromDb = carsRepo.findOne({
+                    carId: iterator.carId
+                });
+                if (carDetailsFromDb && carDetailsFromDb.params) {
+                    const previousReserved = (carDetailsFromDb.params.reserved === false || carDetailsFromDb.params.reserved === null || carDetailsFromDb.params.reserved === undefined) ? false : true;
+                    const currentReserved = iterator.reserved;
+
+                    // Skip processing if reserved status hasn't changed
+                    if (previousReserved === currentReserved) {
+                        continue
+                    }
+                    const wasNotReserved = previousReserved === false || previousReserved === null || previousReserved === undefined;
+                    const isNowReserved = currentReserved === true;
+
+                    // Check if reserved changed from false to true
+                    // Treat null/undefined as false (not reserved)
+
+                    if (wasNotReserved && isNowReserved) {
+                        carsRepo.updateHistoryForParam({
+                            carId: iterator.carId,
+                            param: 'reserved',
+                            value: currentReserved
+                        });
+                        await utils.sendSlackNotification({
+                            carData: iterator,
+                            text: `Car has been reserved: ${iterator.carName} (${iterator.year})`
+                        });
+                        await utils.sleep(config.get('sleep.next_page_in_minute'));
+                        console.log(
+                            `Car reserved status changed from false to true at ${new Date()} : ${iterator.lmsShareLink} for: ${iterator.carId}`
+                        );
+                    } else {
+                        // Check if reserved changed from true to false
+                        const wasReserved = previousReserved === true;
+                        const isNowUnreserved = currentReserved === false || currentReserved === null || currentReserved === undefined;
+
+                        if (wasReserved && isNowUnreserved) {
+                            carsRepo.updateHistoryForParam({
+                                carId: iterator.carId,
+                                param: 'reserved',
+                                value: currentReserved
+                            });
+                            await utils.sendSlackNotification({
+                                carData: iterator,
+                                text: `Car has been unreserved: ${iterator.carName} (${iterator.year})`
+                            });
+                            await utils.sleep(config.get('sleep.next_page_in_minute'));
+                            console.log(
+                                `Car reserved status changed from true to false at ${new Date()} : ${iterator.lmsShareLink} for: ${iterator.carId}`
+                            );
+                        } else {
+                            // Update reserved status for any other change (but don't notify)
+                            // Note: previousReserved !== currentReserved is already guaranteed by outer else
+                            carsRepo.updateHistoryForParam({
+                                carId: iterator.carId,
+                                param: 'reserved',
+                                value: currentReserved
+                            });
+                        }
+                    }
+                }
+
+                // Check for price changes
                 const interestedParams = ['price'];
                 const checkIfDataHasChanged = carsRepo.checkIfDataHasChanged(
                     { carId: iterator.carId, value: iterator[interestedParams[0]] },
                     (param = interestedParams[0])
                 );
                 if (checkIfDataHasChanged) {
-                    const carDetailsFromDb = carsRepo.findOne({
+                    const carDetailsFromDbForPrice = carsRepo.findOne({
                         carId: iterator.carId
                     });
                     const carPriceHistoryDetails =
-                        (carDetailsFromDb &&
-                            carDetailsFromDb.history &&
-                            carDetailsFromDb.history.price &&
-                            carDetailsFromDb.history.price.length &&
-                            carDetailsFromDb.history.price.map(({ value }) => value).join(',')) ||
+                        (carDetailsFromDbForPrice &&
+                            carDetailsFromDbForPrice.history &&
+                            carDetailsFromDbForPrice.history.price &&
+                            carDetailsFromDbForPrice.history.price.length &&
+                            carDetailsFromDbForPrice.history.price.map(({ value }) => value).join(',')) ||
                         ``;
                     const initialMessage = `Price has decreased from ${carPriceHistoryDetails}`;
                     await utils.sendSlackNotification({

@@ -75,6 +75,5 @@ funcs.checkIfDataHasChanged = ({ carId, value }, param = null) => {
   } else {
     return false;
   }
-  return;
 };
 module.exports = funcs;

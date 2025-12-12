@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express'),
   app = express(),
   config = require('config'),
@@ -39,7 +40,7 @@ async function startFavoritesSearch() {
 
 async function onStart() {
   let resp = null;
-  let sleep = config.get('sleep.fifteen_minute');
+  let sleep = config.get('sleep.ten_minute');
   console.log(`On Start Iterations has started`);
   while (true) {
     try {
@@ -58,7 +59,6 @@ async function onStart() {
     }
     await utils.sleep(sleep);
   }
-  return resp;
 }
 
 exports.handler = async (event) => {

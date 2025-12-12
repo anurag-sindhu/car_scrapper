@@ -41,6 +41,7 @@ funcs.startFavoritesSearch = async () => {
     }
     await utils.sleep(config.get(`sleep.five_seconds`));
   };
+  
   for (const platform in config.get('favorites')) {
     for (const key in config.get(`favorites.${platform}`)) {
       carConfig = config.get(`favorites.${platform}.${key}`);
@@ -50,8 +51,6 @@ funcs.startFavoritesSearch = async () => {
             config.get('favorites_additional_query_params')
           )}`
         );
-      } else {
-        data = await utils.getCarDataFromOla({ carId: key });
       }
       await runCheckOnCarsEligibility({ data, carConfig, key });
     }
